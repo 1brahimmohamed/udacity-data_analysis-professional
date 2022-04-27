@@ -1,3 +1,4 @@
+from secrets import choice
 import time
 import pandas as pd
 import numpy as np
@@ -5,6 +6,11 @@ import numpy as np
 CITY_DATA = { 'chicago': 'chicago.csv',
               'new york city': 'new_york_city.csv',
               'washington': 'washington.csv' }
+
+cities = {'chicago', 'new york', 'washington'}
+choices = {'month', 'day', 'both', 'non'}
+months = {'all', 'january', 'february', 'march', 'april', 'may', 'june'}
+days = {'monday', 'tuesday', 'wednesday', 'friday', 'saturday', 'sunday'}
 
 def get_filters():
     """
@@ -16,17 +22,54 @@ def get_filters():
         (str) day - name of the day of week to filter by, or "all" to apply no day filter
     """
     print('Hello! Let\'s explore some US bikeshare data!')
+
     # get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
+    
+    city = input('Which city would you like to see data for? Chicago, New York or Washington? \n').lower()
+    while not city in cities:
+        city = input('Invalid city ... Please select a city from the listed ones \n').lower()
 
+    choice = input('Would you like to sort the data by month, day, both or non? type non for no filters \n').lower()
+    while not choice in choices:
+        choice = input('Invalid choice ... Please select a choice from the listed ones \n').lower()
 
+    if choice == 'month':
     # get user input for month (all, january, february, ... , june)
+        month =  getMonth()
+        day = 'all'
+
+    elif choice == 'day':
+        month = 'all'
+        day = getDay()
+
+    elif choice == 'both':
+        month =  getMonth()
+        day = getDay()
+    else:
+        month = 'all'
+        day = 'all'
 
 
-    # get user input for day of week (all, monday, tuesday, ... sunday)
-
+    print(city, month, day)
 
     print('-'*40)
     return city, month, day
+
+
+def getMonth():
+    month = input('Which month? January, February, March, April, May or June? \n').lower()
+    while not month in months:
+        month = input('Invalid month ... Please select a valid month\n').lower()
+    return month
+
+
+
+def getDay():
+    day = input('Which day? Sunday, Monday, Tuesday, Wednesday or Thursday? \n').lower()
+    while not day in day:
+        day = input('Invalid day ... Please select a valid day \n').lower()
+    return day
+
 
 
 def load_data(city, month, day):
@@ -119,18 +162,20 @@ def user_stats(df):
 
 
 def main():
-    while True:
-        city, month, day = get_filters()
-        df = load_data(city, month, day)
+    # while True:
+    #     city, month, day = get_filters()
+    #     df = load_data(city, month, day)
 
-        time_stats(df)
-        station_stats(df)
-        trip_duration_stats(df)
-        user_stats(df)
+    #     time_stats(df)
+    #     station_stats(df)
+    #     trip_duration_stats(df)
+    #     user_stats(df)
 
-        restart = input('\nWould you like to restart? Enter yes or no.\n')
-        if restart.lower() != 'yes':
-            break
+    #     restart = input('\nWould you like to restart? Enter yes or no.\n')
+    #     if restart.lower() != 'yes':
+    #         break
+
+    get_filters()
 
 
 if __name__ == "__main__":
